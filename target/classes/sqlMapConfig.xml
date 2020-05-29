@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 加载外部properties -->
+    <properties resource="jdbc.properties"/>
+
+    <settings>
+        <!-- 禁用一级缓存 -->
+        <setting name="localCacheScope" value="STATEMENT"/>
+        <!-- 开启二级缓存 -->
+        <setting name="cacheEnabled" value="true"/>
+        <!-- 打印查询语句 -->
+<!--        <setting name="logImpl" value="STDOUT_LOGGING" />-->
+    </settings>
+
+    <!-- 设置别名 -->
+    <typeAliases>
+        <!-- 给单独的实体类起别名 -->
+        <typeAlias type="com.demo.pojo.User" alias="user"/>
+        <!-- 批量起别名：该包下所有类本身的类名，且别名不区分大小写 -->
+        <package name="com.demo.pojo"/>
+    </typeAliases>
+
+    <!-- 配置插件 -->
+    <plugins>
+<!--        <plugin interceptor="com.demo.plugin.ExamplePlugin"/>-->
+<!--        <plugin interceptor="com.demo.plugin.MyPlugin">-->
+<!--            &lt;!&ndash; 配置参数 &ndash;&gt;-->
+<!--            <property name="name" value="zzzzz"/>-->
+<!--        </plugin>-->
+
+        <!-- 分页助手 -->
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <!-- 指定方言 -->
+            <property name="dialect" value="mysql"/>
+        </plugin>
+
+        <!-- 通用mapper -->
+        <plugin interceptor="tk.mybatis.mapper.mapperhelper.MapperInterceptor">
+            <!-- 通用Mapper接口，多个通用接口用逗号隔开 -->
+            <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
+        </plugin>
+    </plugins>
+    <!--  运行环境 default:指定默认的环境名称 -->
+    <environments default="development">
+        <environment id="development">
+            <!-- 当前事务交由JDBC进行管理 -->
+            <transactionManager type="JDBC"/>
+            <!-- type :使用mybatis提供的连接池 -->
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!-- 引入映射配置文件 -->
+    <mappers>
+        <package name="com.demo.mapper"/>
+    </mappers>
+</configuration>

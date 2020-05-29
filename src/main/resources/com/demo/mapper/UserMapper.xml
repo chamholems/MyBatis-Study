@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:命名空间，与id组成sql的唯一标识-->
+<mapper namespace="com.demo.mapper.UserMapper">
+
+    <!-- 查询所有 -->
+    <!--  resultType：表名返回值类型  -->
+    <select id="findAll" resultType="user">
+        select * from user
+     </select>
+
+    <resultMap id="userMap" type="com.demo.pojo.User">
+        <result property="id" column="id"/>
+        <result property="username" column="username"/>
+        <collection property="orderList" ofType="com.demo.pojo.Order">
+            <result property="id" column="id(1)"/>
+            <result property="orderTime" column="order_time"/>
+            <result property="total" column="total"/>
+        </collection>
+    </resultMap>
+
+    <select id="findUserOrders" resultMap="userMap">
+        select * from user u left join `order` o on u.id=o.uid
+    </select>
+
+</mapper>
